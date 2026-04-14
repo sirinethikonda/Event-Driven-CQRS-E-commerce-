@@ -115,6 +115,20 @@ mvn clean verify
 
 ---
 
+## 🛠️ Monitoring & Health Checks
+
+Both services include **Spring Boot Actuator** for real-time monitoring:
+
+- **Command Service Health**: `http://localhost:8080/actuator/health`
+- **Query Service Health**: `http://localhost:8081/actuator/health`
+
+**Key Health Indicators:**
+- **Database**: PostgreSQL connectivity (Command Service).
+- **Kafka**: connectivity to the broker ecosystem.
+- **Kafka Streams**: Custom indicator tracking if the topology is in `RUNNING` or `REBALANCING` state (Query Service).
+
+---
+
 ## 🏗️ Configuration Details & Reliability
 
 1. **Exactly-Once Semantics (EOS):** Configured via `processing.guarantee=exactly_once_v2` ensuring each message is processed strictly once and only once across the aggregations during partial failures.
