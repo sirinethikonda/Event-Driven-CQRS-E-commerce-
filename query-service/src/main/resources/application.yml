@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: query-service
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    streams:
+      application-id: ${KAFKA_STREAMS_APP_ID:ecommerce-analytics}
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        processing.guarantee: exactly_once_v2
+        commit.interval.ms: 1000
+
+topics:
+  product-events: product-events
+  order-events: order-events
+
+logging:
+  level:
+    org.apache.kafka.streams: INFO

@@ -1,0 +1,44 @@
+{
+  "projectName": "Event-Driven CQRS E-Commerce Analytics System",
+  "apiEndpoints": {
+    "commandAPI": [
+      {
+        "method": "POST",
+        "endpoint": "/api/products",
+        "description": "Create a new product."
+      },
+      {
+        "method": "POST",
+        "endpoint": "/api/orders",
+        "description": "Create a new composite order."
+      },
+      {
+        "method": "PUT",
+        "endpoint": "/api/orders/{id}/status",
+        "description": "Update order status (e.g. \"PAID\")."
+      }
+    ],
+    "queryAPI": [
+      {
+        "method": "GET",
+        "endpoint": "/api/analytics/products/{productId}/sales",
+        "description": "Returns aggregate total sales for a given item."
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/analytics/categories/{categoryName}/revenue",
+        "description": "Returns total cumulative revenue by category."
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/analytics/hourly-sales",
+        "description": "Returns tumbling 1-hour window revenue slices."
+      },
+      {
+        "method": "GET",
+        "endpoint": "/api/analytics/topology",
+        "description": "Inspect raw Kafka Streams computational graph."
+      }
+    ]
+  }
+}
