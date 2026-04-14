@@ -27,6 +27,54 @@ The system is strictly divided into two distinct microservices:
    - Continuously aggregates sales and revenue in real-time.
    - Aggregations are kept in locally materialized view state stores, accessible with sub-millisecond latency via an Interactive Query API.
 
+### 🗺️ System Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph Client_Layer [Client Applications]
+        Client(fa:fa-user Client)
+    end
+
+    subgraph Command_Side [Command Service - Port 8080]
+        CS[Command API Controller]
+        CR[Repository]
+        EP[Event Producer]
+        DB[(PostgreSQL)]
+    end
+
+    subgraph Messaging_Layer [Apache Kafka]
+        PT[[product-events]]
+        OT[[order-events]]
+    end
+
+    subgraph Query_Side [Query Service - Port 8081]
+        AT[Analytics Topology]
+        QS[Analytics Query API]
+        subgraph Materialized_Views [State Stores]
+            SS1[(Product Sales)]
+            SS2[(Category Revenue)]
+            SS3[(Hourly Sales)]
+        end
+    end
+
+    %% Command Flow
+    Client -- "1. Send Command" --> CS
+    CS -- "2. Persist" --> CR
+    CR --> DB
+    CS -- "3. Produce Events" --> EP
+    EP --> PT
+    EP --> OT
+
+    %% Query Flow (Streaming)
+    PT -- "4. Stream/Process" --> AT
+    OT -- "4. Stream/Process" --> AT
+    AT -- "5. Materialize View" --> Materialized_Views
+
+    %% Read Flow
+    Client -- "6. Query Analytics" --> QS
+    QS -- "7. Local Lookups" --> Materialized_Views
+```
+
 ---
 
 ## 🚀 Technologies Used
